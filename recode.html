@@ -8,13 +8,16 @@
 <link href="css/all.css" rel="stylesheet" type="text/css">
     <link href="js/bstable/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="js/bstable/css/bootstrap-table.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="layui/css/layui.css" media="all">
+	<script src="layui/layui.js"></script>
 
 </head>
 <body>
 
 <div class="div_find">
 
-    <p><label class="find_labela">类型：</label><select class="find_input">
+    <p><label class="find_labela">类型：</label>
+	<select class="find_input">
         <option>全部</option>
         <option>通知</option>
         <option>公告</option>
@@ -22,21 +25,24 @@
         <option>其它</option>
 
 
-    </select><label class="find_labela">会议名称：</label>
+    </select>
+	<label class="find_labela">会议名称：</label>
         <input type="text" class="find_input">
-        <label class="find_labela">履职得分：</label><input type="text" id="demo" class="find_input">
+        <label class="find_labela">履职得分：</label>
+		<input type="text" id="demo" class="find_input">
+		
+		<button class="layui-btn" id="search" type="button" style="margin-left: 15px">
+			<i class="layui-icon layui-icon-search"></i> 查询
+		</button>
+		<button class="layui-btn layui-btn-primary">导出</button>
     </p>
+	
+	
 
   </div>
-    <p class="p_but">
-
-
-        <i class="down_i" ></i><a href="#" class="add_a">导出</a>
-        <i class="print_i" ></i><a href="#" class="add_a">打印</a>
-
-   </p>
+    
 <p>
-    <table data-url="json/data_alae_list.json" id="table" class="table_style" style="margin: 0 auto" >
+    <table  id="table" class="table_style" style="margin: 10 auto" >
     </table>
 </p>
 
@@ -56,10 +62,10 @@
 <script type="text/javascript">
     $(function () {
         $('#table').bootstrapTable({
-            method: "get",
+            method: "post",
             striped: true,
             singleSelect: false,
-            url: "json/recode.json",
+            url: "http://localhost:8080/record/loadRecord",
             dataType: "json",
             pagination: true, //分页
             pageSize: 10,
@@ -68,45 +74,45 @@
             contentType: "application/x-www-form-urlencoded",
             queryParams: null,
             columns: [
-                {
-                    checkbox: "true",
-                    field: 'check',
-                    align: 'center',
-                    valign: 'middle'
-                }
-                ,
+                // {
+                //     checkbox: "true",
+                //     field: 'check',
+                //     align: 'center',
+                //     valign: 'middle'
+                // },
+                
                 {
                     title: "编号",
-                    field: 'id',
+                    field: 'recid',
                     align: 'center',
                     valign: 'middle'
                 },
                 {
                     title: '标题',
-                    field: 'title',
+                    field: 'recbt',
                     align: 'center',
                     valign: 'middle'
                 },
                 {
                     title: '类型',
-                    field: 'type',
+                    field: 'rechy',
                     align: 'center',
                     valign: 'middle'
                 },
 
                 {
                     title: '会议时间',
-                    field: 'time',
+                    field: 'recsj',
                     align: 'center'
                 },
                 {
                     title: '履职得分',
-                    field: 'core',
+                    field: 'recdf',
                     align: 'center'
                 },
                 {
                     title: '履职排名',
-                    field: 'grade',
+                    field: 'recpm',
                     align: 'center'
                 },
 
@@ -117,8 +123,6 @@
                     align: 'center',
                     formatter: function (value, row) {
                         var e = '<a  href="#" title="查看详情" onclick="openlayer(\'' + row.id + '\')">查看详情</a> ';
-
-
 
                         return e;
                     }

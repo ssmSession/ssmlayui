@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		
+		<link href="css/all.css" rel="stylesheet" type="text/css">
+		<link href="js/bstable/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link href="js/bstable/css/bootstrap-table.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+	</head>
+	<body>
+		<form class="layui-form">
+				<div class="layui-inline">
+				<label class="layui-form-label" style="width: 100px;"> 届      次：</label>
+				<div class="layui-input-inline">
+					<select  name="period" id="period">
+						<option value="0"></option>
+						<option value="1">通知</option>
+						<option value="2">公告</option>
+						<option value="3">活动</option>
+						<option value="4">会议</option>
+						<option value="5">其它</option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: 150px;">提案号：</label>
+				<div class="layui-input-inline">
+					<input type="text" class="layui-input" name="mark" id="mark" style="width: 200px;">
+				</div>
+			</div>
+			
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: 150px;">提案类型：</label>
+				<div class="layui-input-inline">
+					<select name="protype" id="protype">
+						<option value="0"></option>
+						<option value="1">集体提案</option>
+						<option value="2">个人提案</option>
+					</select>
+				</div>
+			</div>
+			
+			
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: 100px;">承办单位：</label>
+				<div class="layui-input-inline">
+					<select name="procbdw" id="procbdw">
+						<option value="0"></option>
+						<option value="1">集体提案</option>
+						<option value="2">个人提案</option>
+					</select>
+				</div>
+			</div>
+			
+			
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: 150px;">提案类别：</label>
+				<div class="layui-input-inline">
+					<select name="procategory" id="procategory">
+						<option value="0"></option>
+						<option value="1">集体提案</option>
+						<option value="2">个人提案</option>
+					</select>
+				</div>
+			</div>
+			
+			
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: 150px;">提案状态：</label>
+				<div class="layui-input-inline">
+					<select name="prostate" id="prostate">
+						<option value="0"></option>
+						<option value="1">集体提案</option>
+						<option value="2">个人提案</option>
+					</select>
+				</div>
+			</div>
+			
+			
+			
+			
+		</form>
+		
+		<script src="js/jquery/jQuery-2.2.0.min.js"></script>
+		<script src="js/bstable/js/bootstrap.min.js"></script>
+		<script src="js/bstable/js/bootstrap-table.js"></script>
+		<script src="js/bstable/js/bootstrap-table-zh-CN.min.js"></script>
+		<script src="js/date/js/laydate.js"></script>
+		<script src="./js/date/js/laydate.js"></script>
+		<script src="layui/layui.js"></script>
+		<script src="js/date/js/laydate.js"></script>
+	
+			
+		<script>
+			layui.use(['form', 'table', 'laypage'], function() {
+				var form = layui.form;
+				$ = layui.jquery;
+				table = layui.table;
+				laypage = layui.laypage;
+
+				form.render();
+})
+		</script>
+	</body>
+</html>

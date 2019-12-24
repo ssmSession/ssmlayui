@@ -1,140 +1,278 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>社情民意填写</title>
-
-
-    <link href="css/all.css" rel="stylesheet" type="text/css">
+    <title>社情民意填写</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="css/index.css" media="all" />
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <link href="css/all1.css" rel="stylesheet" type="text/css">
     <link href="js/editor/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="js/editor/css/froala_editor.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/social/socialTx.js"></script>
 </head>
+<script>
 
+    layui.use('form', function() {
+        var form = layui.form;
+        layer = layui.layer;
+
+
+        //监听提交
+        form.on('submit(add)', function (data) {
+            var field = data.field;
+            field.opbssj = new Date(field.opbssj);
+            $.ajax({
+                url: "addOpinion",
+                data: field,
+                dataType: "json",
+                type: "post",
+                async: false,
+                success: function (data) {
+                    if (data.success) {
+                        alert(data.message);
+                        window.location.reload();
+                    } else {
+                        layer.msg("系统繁忙");
+                    }
+                }
+            });
+            return false;
+        });
+
+        function closes() {
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index);
+        }
+
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+
+            laydate.render({
+                elem: '#opbssj'
+                , type: 'datetime'
+
+            });
+        });
+        var message;
+        layui.use(['form', 'upload'], function () {
+            var form = layui.form;
+            var $ = layui.jquery
+                , upload = layui.upload;
+            //多文件列表示例
+
+            var demoListView = $('#demoList')
+                , uploadListIns = upload.render({
+                elem: '#testList'
+                , url: 'File/upload?fileid=' + $("#fileid").val()
+                , accept: 'file'
+                , multiple: true
+                , auto: false
+                , size: 200 * 1024 * 1024 //限制文件大小，单位 KB
+                , bindAction: '#testListAction'
+                , choose: function (obj) {
+                    var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                    //读取本地文件
+                    obj.preview(function (index, file, result) {
+                        var tr = $(['<tr id="upload-' + index + '">'
+                            , '<td>' + file.name + '</td>'
+                            , '<td>' + (file.size / 1024 / 1024).toFixed(1) + 'M</td>'
+                            , '<td>等待上传</td>'
+                            , '<td>'
+                            , '<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+                            , '<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                            , '</td>'
+                            , '</tr>'].join(''));
+
+                        //单个重传
+                        tr.find('.demo-reload').on('click', function () {
+                            obj.upload(index, file);
+                        });
+
+                        //删除
+                        tr.find('.demo-delete').on('click', function () {
+                            delete files[index]; //删除对应的文件
+                            tr.remove();
+                            uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                        });
+                        demoListView.append(tr);
+                    });
+                }
+                , done: function (res, index, upload) {
+                    if (res.code == 0) { //上传成功
+                        message = res.code;
+                        var tr = demoListView.find('tr#upload-' + index)
+                            , tds = tr.children();
+                        tds.eq(2).html('<span id="context" style="color: #5FB878;">上传成功</span>');
+                        tds.eq(3).html(''); //清空操作
+                        return; //删除文件队列已经上传成功的文件
+                    }
+                    this.error(index, upload);
+                }
+                , error: function (index, upload) {
+                    message = 1;
+                    var tr = demoListView.find('tr#upload-' + index)
+                        , tds = tr.children();
+                    tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+                    tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+                }
+            });
+
+
+            //提交按钮监听
+            $("#bindAction").click(function () {
+                // console.log(1);
+                if (message == 1) {
+                    layer.alert('请确保文件上传成功', {
+                        icon: 5,
+                        title: "提示"
+                    });
+                } else {
+                    submit();
+                }
+            })
+
+            //提交方法
+            function submit() {
+                // 监听提交
+                form.on('submit(form)', function (data) {
+                    // console.log(data);
+                    // layer.msg(JSON.stringify(data.field));
+                    var datas = data.field;
+                    datas.prodate = new Date(datas.prodate);
+                    if (null == datas.file || "" == datas.file) {
+                        datas.file = "";
+                    }
+
+                    // $.ajax({
+                    //     url: 'submit',
+                    //     data:data.field,
+                    //     dataType: "json",
+                    //     Type: "post",
+                    //     async: false,
+                    //     success: function (data) {
+                    //         layer.alert(data.message, {
+                    //             icon: 5,
+                    //             title: "提示"
+                    //         });
+                    //     }
+                    // })
+                    return false;
+                });
+            }
+
+            //取消按钮
+            $("#reset").click(function () {
+                //清空文件
+                $("#demoList").remove();
+                //提案取消 删除已上传的文件
+                $.ajax({
+                    url: 'File/delete',
+                    data: {"fileid": $("#fileid").val()},
+                    dataType: "json",
+                    Type: "post",
+                    async: false,
+                    success: function (data) {
+                    }
+                })
+            });
+        });
+    });
+</script>
 <body style="background-color: #e6ecf5">
 <div class="book_con01">
-
-
-    <form id="form_demo" >   <p class="book_p">
+    <form  id="form_demo" class="layui-form" action="" method="post" >   <p class="book_p">
         <table class="book_table" border="1" cellpadding="10">
-    <tr><td colspan="4" style="text-align: center">社情民意填报内容</td>
-        </tr>
+            <tr><td colspan="4" style="text-align: center">社情民意填报内容</td>
+            </tr>
             <tr>
-      <td>  <label class="td_label">来稿标题</label><i class="i_start"></i>
-    </td>
-        <td colspan="3"><input type="text" class="book_input03" name ="name" minlength="2"  required /></td>
-
-    </tr>
-
-    <tr><td><label class="td_label">大类</label></td>
-        <td ><select>
-            <option>大类一</option>
-        </select></td>
-
-        <td><label class="td_label">小类</label></td>
-        <td>
-            <select>
-                <option>大类一</option>
-            </select>
-        </td>
-
-    </tr>
-    <tr><td><label class="td_label">来稿人/单位</label></td>
-        <td ><input type="text" class="book_input03"/></td>
-
-        <td><label class="td_label">联系电话</label></td>
-        <td>
-            <input type="text" class="book_input03"/>
-        </td>
-
-    </tr>
-    <tr> <td><label class="td_label">报送人身份</label></td>
-        <td >
-            <select>
-                <option>市政协委</option>
-                <option>区政协委员</option>
-                <option>党派成员</option>
-                <option>特约信息员</option>
-            </select>
-        </td>
-        <td><label class="td_label">报送时间</label></td>
-        <td>
-            <input type="date" class="book_input03"/>
-        </td>
-
-    </tr>
-    <tr> <td><label class="td_label">报送人</label></td>
-        <td colspan="3">
-            <input type="text" class="book_input03"/>
-        </td>
-    </tr>
-            <tr><td><label class="td_label">签发领导</label></td>
-                <td ><input type="text" class="book_input03"/></td>
-
-                <td><label class="td_label">是否公开</label></td>
-                <td>
-                    <input type="radio" class="input_radio" checked="checked" name="radio01"/><a>是</a><input type="radio" class="input_radio" name="radio01"/><a>否</a>
+                <td>  <label class="td_label">来稿标题</label><i class="i_start" ></i>
                 </td>
+                <td colspan="3"><input type="text" class="book_input03" name="oplgbt" id="oplgbt" minlength="2"  required lay-verify="required" autocomplete="off"
+                /></td>
 
             </tr>
 
+            <tr><td><label class="td_label">单位类型</label></td>
+                <td ><select class="layui-select" id="opdwllx" name="opdwllx" lay-verify="required">
+                </select></td>
 
-    <tr>
-        <td><label class="td_label">具体内容</label></td><td colspan="3">
-        <textarea  class="textArae" id="editor" ></textarea>
-    </td>
+                <td><label class="td_label">报关方式</label></td>
+                <td>
+                    <select class="layui-select" id="opbgfs" name="opbgfs" lay-verify="required">
+                    </select>
+                </td>
 
-    </tr>
+            </tr>
+            <tr><td><label class="td_label">来稿人/单位</label></td>
+                <td ><input type="text" id="oplgrordw" name="oplgrordw" class="book_input03" required lay-verify="required" autocomplete="off"/></td>
 
-    <tr ><td>
-        <label class="td_label">附件</label>
-    </td>
-        <td colspan="5">
-            <p><label class="td_label">文件1</label><input type="file" value="选择文件"/></p>
-    <p><label class="td_label">文件2</label><input type="file" value="选择文件"/> </p>
-    <p><label class="td_label">文件3</label><input type="file" value="选择文件"/></p>
-    <p><label class="label_red">附件总大小不能超过200M，超过限制,将不能发送</label></p>
+                <td><label class="td_label">联系电话</label></td>
+                <td>
+                    <input type="text"  id="optel" name="optel" class="book_input03" required lay-verify="required|phone" autocomplete="off"/>
+                </td>
+
+            </tr>
+            <tr> <td><label class="td_label">报送人身份</label></td>
+                <td >
+                    <select class="layui-select"  id="opbsrsf" name="opbsrsf" required lay-verify="required" >
+                    </select>
+                </td>
+                <td><label class="td_label">报送时间</label></td>
+                <td>
+                    <input type="text" class="layui-input book_input03" name="opbssj" id="opbssj" required lay-verify="required" autocomplete="off"/>
+                </td>
+
+            </tr>
+            <tr> <td><label class="td_label">报送人</label></td>
+                <td colspan="3">
+                    <input type="text" id="opbsr" name="opbsr" class="book_input03" required lay-verify="required" autocomplete="off"/>
+                </td>
+            </tr>
+            <tr><td><label class="td_label">签发领导</label></td>
+                <td ><input type="text" id="opqfld" name="opqfld" class="book_input03" required lay-verify="required" autocomplete="off"/></td>
+
+                <td><label class="td_label">是否公开</label></td>
+                <td>
+                    <input type="radio" name="opsfgk" value="0" title="是">
+                    <input type="radio" name="opsfgk" value="1" title="否" checked>
+                </td>
+
+            </tr>
+            <tr>
+                <td><label class="td_label">具体内容</label></td><td colspan="3">
+                <textarea  class="textArae" name="opjtnr" id="opjtnr" required lay-verify="required" autocomplete="off"></textarea>
+            </td>
+
+            </tr>
+            <tr ><td>
+                <label class="td_label">附件</label>
+            </td>
+                <td colspan="5">
+                    <div class="layui-upload">
+                        <div class="layui-upload-list">
+                            <table class="layui-table">
+                                <thead>
+                                <tr><th>文件名</th>
+                                    <th>大小</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr></thead>
+                                <tbody id="demoList"></tbody>
+                            </table>
+                        </div>
+                        <button type="button" class="layui-btn layui-btn-normal" id="testList">选择文件</button>
+                        <button type="button" class="layui-btn" id="testListAction" >开始上传</button>
+                    </div>
+        <p><label style="color: red">附件总大小不能超过50M，超过限制,将不能发送</label></p>
+        <input type="hidden" id="fileid" name="fileid" value="${fileid}">
         </td>
 
-    </tr>
-
-
-</table>
-    </p>
-    <p class="book_foot"><input type="submit" value="提交提案"/><input type="button" value="存为草稿"/><input type="button" value="重置"/><input type="button" value="取消"/></p></form>
+        </tr>
+        </table>
+        </p>
+        <p class="book_foot"><button class="layui-btn" lay-submit lay-filter="add">立即提交</button>
+            <button style="width: 100px;" type="reset" class="layui-btn layui-btn-danger" onclick="closes()">重置</button></p></form>
 </div>
-<script  src="js/jquery/jQuery-2.2.0.min.js"></script>
-<script src="js/editor/js/froala_editor.min.js"></script>
-
-<script src="js/editor/js/plugins/tables.min.js"></script>
-<script src="js/editor/js/plugins/lists.min.js"></script>
-<script src="js/editor/js/plugins/colors.min.js"></script>
-<script src="js/editor/js/plugins/media_manager.min.js"></script>
-<script src="js/editor/js/plugins/font_family.min.js"></script>
-<script src="js/editor/js/plugins/font_size.min.js"></script>
-<script src="js/editor/js/plugins/block_styles.min.js"></script>
-<script src="js/editor/js/plugins/video.min.js"></script>
-<script src="js/date/js/laydate.js"></script>
-<script>
-    $(function(){
-        $('#editor').editable({inlineMode: false, alwaysBlank: true})
-    });
-</script>
-<script >
-    $.validator.setDefaults({
-        submitHandler: function() {
-            alert("修改成功");
-        }
-    });
-    $().ready(function() {
-        $("#form_demo").validate();
-    });
-</script>
-<script>
-    !function(){
-        laydate.skin('danlan');//
-        laydate({elem: '#demo'});
-        laydate({elem: '#demo1'});//
-    }();
-</script>
 </body>
 </html>
