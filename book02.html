@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -21,7 +21,7 @@
             <tr>
       <td>  <label class="td_label">来稿标题</label><i class="i_start"></i>
     </td>
-        <td colspan="3"><input type="text" class="book_input03" name ="name" minlength="2"  required /></td>
+        <td colspan="3"><input type="text" class="book_input03" name ="name"  minlength="2"  required /></td>
 
     </tr>
 
@@ -100,7 +100,7 @@
 
 </table>
     </p>
-    <p class="book_foot"><input type="submit" value="提交提案"/><input type="button" value="存为草稿"/><input type="button" value="重置"/><input type="button" value="取消"/></p></form>
+    <p class="book_foot"><input type="submit" value="提交提案" onclick="submit()"/><input type="button" value="存为草稿"/><input type="button" value="重置"/><input type="button" value="取消"/></p></form>
 </div>
 <script  src="js/jquery/jQuery-2.2.0.min.js"></script>
 <script src="js/editor/js/froala_editor.min.js"></script>
@@ -116,18 +116,23 @@
 <script src="js/date/js/laydate.js"></script>
 <script>
     $(function(){
-        $('#editor').editable({inlineMode: false, alwaysBlank: true})
+			
+        // $('#editor').editable({inlineMode: false, alwaysBlank: true})
     });
 </script>
 <script >
-    $.validator.setDefaults({
-        submitHandler: function() {
-            alert("修改成功");
-        }
-    });
-    $().ready(function() {
-        $("#form_demo").validate();
-    });
+	function submit(){
+		
+	}
+	
+//     $.validator.setDefaults({
+//         submitHandler: function() {
+//             alert("修改成功");
+//         }
+//     });
+//     $().ready(function() {
+//         $("#form_demo").validate();
+//     });
 </script>
 <script>
     !function(){
