@@ -1,156 +1,516 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>无标题文档</title>
 
 
-    <link href="css/all.css" rel="stylesheet" type="text/css">
-    <link href="js/editor/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="js/editor/css/froala_editor.min.css" rel="stylesheet" type="text/css">
-</head>
+		<link href="css/all.css" rel="stylesheet" type="text/css">
+		<link href="js/editor/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link href="js/editor/css/froala_editor.min.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="js/date/js/need/laydate.css" />
+		<script type="text/javascript" src="layui/layui.js"></script>
+	</head>
 
-<body style="background-color: #e6ecf5">
-<div class="book_con01">
-    <p class="book_p"><span class="book_titSpan"><input type="text" class="book_input01"/><label>类</label><input type="text" class="book_input02"/><label>号</label></span></p>
-    <h1 class="book_h01">xxxxxx<input type="text" class="book_input01"/>届<input type="text" class="book_input02"/>次会议第<input type="text" class="book_input01"/>号提案</h1>
-    <form id="form_demo" >   <p class="book_p">
-        <table class="book_table" border="1" cellpadding="10">
-    <tr><td>
-        <label class="td_label">提案类型</label><i class="i_start"></i>
-    </td>
-        <td colspan="5"><input type="radio" class="input_radio" checked="checked" name="radio01"/><a>集体提案</a><input type="radio" class="input_radio" name="radio01"/><a>个人提案</a><input type="radio" class="input_radio" name="radio01"/><a>联名提案</a></td>
+	<body style="background-color: #e6ecf5" class="layui-body">
+		<div class="book_con01">
+			<form id="form_demo" class="layui-form" method="post" enctype="multipart/form-data">
+				<input type="hidden" id="prostate" name="prostate">
+				<input type="hidden" id="procase" name="procase">
+				<h1 class="book_h01">
+					<input type="text" class="book_input01" name="period" id="period" required lay-verify="required" autocomplete="off" />届
+					<input type="text" name="next" id="next" class="book_input02" lay-verify="required" autocomplete="off" />次会议第
+					<input type="text" name="mark" id="mark" class="book_input01" required lay-verify="required|mark" autocomplete="off" />号提案
+				</h1>
+				<p class="book_p">
+					<table class="book_table" border="1" cellpadding="10">
+						<tr>
+							<td>
+								<label class="td_label">提案类型</label><i class="i_start"></i>
+							</td>
+							<td colspan="5">
+								<select name="protype" required lay-verify="required">
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label class="td_label">案由</label><i class="i_start"></i>
+							</td>
+							<td colspan="5">
+								<input type="text" name="proany" required lay-verify="required" autocomplete="off" class="book_input03">
+							</td>
 
-    </tr>
-    <tr><td>
-        <label class="td_label">案由</label><i class="i_start"></i>
-    </td>
-        <td colspan="5"><input type="text" class="book_input03" name ="name" minlength="2"  required /></td>
+						</tr>
+						<tr>
+							<td>
+								<label class="td_label">提案类别</label><i class="i_start"></i>
+							</td>
+							<td colspan="5">
+								<select class="find_input" id="procategory" name="procategory" required lay-verify="required">
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><label class="td_label">第一提案人</label><i class="i_start"></i></td>
+							<td><input type="text" class="book_input03" name="protar" required lay-verify="required" autocomplete="off" /></td>
 
-    </tr>
-    <tr><td><label class="td_label">第一提案人</label><i class="i_start"></i></td>
-        <td ><input type="text" class="book_input03" name ="name" minlength="2"  required /></td>
+							<td><label class="td_label">名次</label></td>
+							<td>
+								<input type="text" name="promc" class="book_input03" required lay-verify="required" autocomplete="off" />
+							</td>
+							<td><label class="td_label">党派</label></td>
+							<td>
+								<input type="text" name="prodp" class="book_input03" required lay-verify="required" autocomplete="off" />
+							</td>
+						</tr>
+						<tr>
+							<td><label class="td_label">委员证号</label></td>
+							<td><input type="text" name="prowyzh" class="book_input03" required lay-verify="required" autocomplete="off" /></td>
 
-        <td><label class="td_label">名次</label></td>
-        <td>
-            <input type="text" class="book_input03"/>
-        </td>
-        <td><label class="td_label">党派</label></td>
-        <td>
-            <input type="text" class="book_input03"/>
-        </td>
-    </tr>
-    <tr><td><label class="td_label">委员证号</label></td>
-        <td ><input type="text" class="book_input03"/></td>
+							<td><label class="td_label">邮政编号</label></td>
+							<td>
+								<input type="text" name="postcode" class="book_input03" required lay-verify="postcode" autocomplete="off" />
+							</td>
+							<td><label class="td_label">联系电话</label></td>
+							<td>
+								<input type="text" name="protel" class="book_input03" required lay-verify="required|phone" autocomplete="off" />
+							</td>
+						</tr>
+						<tr>
+							<td><label class="td_label">单位及职务</label></td>
+							<td colspan="2">
+								<input type="text" name="prodwjzw" class="book_input03" required lay-verify="required" autocomplete="off" />
+							</td>
+							<td><label class="td_label">E-Mail</label></td>
+							<td colspan="2">
+								<input type="email" name="proemail" class="book_input03" required lay-verify="required|email" autocomplete="off" />
+							</td>
 
-        <td><label class="td_label">邮政编号</label></td>
-        <td>
-            <input type="text" class="book_input03"/>
-        </td>
-        <td><label class="td_label">联系电话</label></td>
-        <td>
-            <input type="number" class="book_input03"/>
-        </td>
-    </tr>
-    <tr> <td><label class="td_label">单位及职务</label></td>
-        <td colspan="2">
-            <input type="text" class="book_input03"/>
-        </td>
-        <td><label class="td_label">E-Mail</label></td>
-        <td colspan="2">
-            <input type="email" class="book_input03"/>
-        </td>
+						</tr>
+						<tr>
+							<td><label class="td_label">通讯地址</label></td>
+							<td colspan="5">
+								<input type="text" name="protxdz" class="book_input03" required lay-verify="required" autocomplete="off" />
+							</td>
+						</tr>
 
-    </tr>
-    <tr> <td><label class="td_label">通讯地址</label></td>
-        <td colspan="5">
-            <input type="text" class="book_input03"/>
-        </td>
-    </tr>
-    <tr><td><label class="td_label">主题词</label></td>
-        <td colspan="5">
-            <input type="file"  value="上传主题词"/>
-        </td>
-    </tr>
-    <tr><td colspan="6"><label class="td_label">提案内容（包括案由、案据和方案）</label></td>
+						<tr>
+							<td colspan="6"><label class="td_label">提案内容（包括案由、案据和方案）</label></td>
 
-    </tr>
-    <tr><td colspan="6">
-        <textarea  class="textArae" id="editor" ></textarea>
-    </td>
+						</tr>
+						<tr>
+							<td colspan="6">
+								<textarea class="textArae" name="protanr" id="editor" required lay-verify="required" autocomplete="off" style="height: 200px;"></textarea>
+							</td>
 
-    </tr>
-    <tr><td colspan="5"><label class="label_right">提案日期</label></td>
-        <td> <input type="date" class="book_input03" id="demo"/></td>
+						</tr>
+						<tr>
+							<td colspan="3"><label class="td_label">提案日期</label></td>
+							<td colspan="3">
+								<input type="date" class="book_input03" name="prodate" id="demo" required lay-verify="required" autocomplete="off" />
+							</td>
 
-    </tr>
-    <tr ><td>
-        <label class="td_label">附件</label>
-    </td>
-        <td colspan="5">
-            <p><label class="td_label">文件1</label><input type="file" value="选择文件"/></p>
-    <p><label class="td_label">文件2</label><input type="file" value="选择文件"/> </p>
-    <p><label class="td_label">文件3</label><input type="file" value="选择文件"/></p>
-    <p><label class="label_red">附件总大小不能超过200M，超过限制,将不能发送</label></p>
-        </td>
+						</tr>
+						<tr>
+							<td>
+								<label class="td_label">附件</label>
+							</td>
+							<td colspan="5">
+								<div class="layui-upload">
+									<div class="layui-upload-list">
+										<table class="layui-table">
+											<thead>
+												<tr>
+													<th>文件名</th>
+													<th>大小</th>
+													<th>状态</th>
+													<th>操作</th>
+												</tr>
+											</thead>
+											<tbody id="demoList"></tbody>
+										</table>
+									</div>
+									<button type="button" class="layui-btn layui-btn-normal" id="testList">选择文件</button>
+									<button type="button" class="layui-btn" id="testListAction">开始上传</button>
+								</div>
+								<p><label style="color: red">附件总大小不能超过50M，超过限制,将不能发送</label></p>
+								<input type="hidden" id="fileid" name="fileid">
+							</td>
 
-    </tr>
-    <tr><td><label class="td_label">相关情况</label></td>
-        <td colspan="5"><input type="checkbox" class="input_radio" /><a>同意公开发表</a><input type="checkbox" class="input_radio" /><a>同意其它委员参阅</a></td>
+						</tr>
+						<tr>
+							<td><label class="td_label">相关情况</label></td>
+							<td colspan="5">
+								<input type="checkbox" id="proxgqk" name="proxgqk" title="同意公开发表" checked>
+							</td>
 
-    </tr>
-    <tr><td colspan="2"><label class="td_label">希望办理的承办单位（供参考）</label></td>
-        <td colspan="4"><input type="button" value="选择单位"/></td>
+						</tr>
+						<tr>
+							<td colspan="2"><label class="td_label">希望办理的承办单位（供参考）</label></td>
+							<td colspan="4">
+								<select name="procbdw" required lay-verify="required">
+								</select>
+							</td>
 
-    </tr>
-    <tr><td><label class="td_label">提案联系人</label></td>
-        <td colspan="4"><input type="text" placeholder="输入姓名" class="book_input04"/><input type="text" placeholder="输入单位" class="book_input05"/><input type="text" placeholder="输入电话" class="book_input04"/></td>
+						</tr>
+						<tr>
+							<td><label class="td_label">提案联系人</label></td>
+							<td colspan="5">
+								<input type="text" name="prolxrxm" placeholder="输入姓名" class="book_input03" required lay-verify="required"
+								 autocomplete="off" />
+								<input type="text" name="prolxrdw" placeholder="输入单位" class="book_input03" required lay-verify="required"
+								 autocomplete="off" />
+								<input type="text" name="prolxrdh" placeholder="输入电话" class="book_input03" required lay-verify="required|phone"
+								 autocomplete="off" />
+							</td>
+						</tr>
+						<tr>
+							<td><label class="td_label">提案联名人</label></td>
+							<td colspan="5">
+								<input type="text" name="joinid" placeholder="输入提案联名人" class="book_input03" autocomplete="off" />
+							</td>
+						</tr>
 
-        <td><input type="button" value="添加提案联系人"/></td>
-    </tr>
-    <tr><td><label class="td_label">提案联名人</label></td>
-        <td colspan="4"><input type="text"  class="book_input03"/></td>
+					</table>
+				</p>
+				<p class="book_foot">
+					<button type="button" class="layui-btn" lay-submit lay-filter="form" id="bindAction">立即提交</button>
+					<button type="button" class="layui-btn" lay-submit lay-filter="form" id="save">存为草稿</button>
+					<button type="reset" class="layui-btn" id="reset">取消</button>
+				</p>
+			</form>
+		</div>
+		<script src="js/jquery/jQuery-2.2.0.min.js"></script>
+		<script src="js/editor/js/froala_editor.min.js"></script>
 
-        <td><input type="button" value="添加提案联名人"/></td>
-    </tr>
+		<script src="js/editor/js/plugins/tables.min.js"></script>
+		<script src="js/editor/js/plugins/lists.min.js"></script>
+		<script src="js/editor/js/plugins/colors.min.js"></script>
+		<script src="js/editor/js/plugins/media_manager.min.js"></script>
+		<script src="js/editor/js/plugins/font_family.min.js"></script>
+		<script src="js/editor/js/plugins/font_size.min.js"></script>
+		<script src="js/editor/js/plugins/block_styles.min.js"></script>
+		<script src="js/editor/js/plugins/video.min.js"></script>
+		<script src="js/date/js/laydate.js"></script>
+		<script>
+			var message;
+			$(function() {
+				guid();
+				initDict();
+				initDict2();
+				initDict3();
+				// $('#editor').editable({inlineMode: false, alwaysBlank: true})
+				//你要用layui的文本框必须在js里面加上这一段 初始化layui,layui文档里面说了
+				//如果你只用layui的from表单里面的东西,这里就只写from,加上upload就是初始化layui的upload文件上传
+				layui.use(['form', 'upload'], function() {
+					var form = layui.form;
+					var $ = layui.jquery,
+						upload = layui.upload;
 
-</table>
-    </p>
-    <p class="book_foot"><input type="submit" value="提交提案"/><input type="button" value="存为草稿"/><input type="button" value="重置"/><input type="button" value="取消"/></p></form>
-</div>
-<script  src="js/jquery/jQuery-2.2.0.min.js"></script>
-<script src="js/editor/js/froala_editor.min.js"></script>
+					//多文件列表示例
+					var demoListView = $('#demoList'),
+						uploadListIns = upload.render({
+							elem: '#testList',
+							url: 'http://localhost:8080/File/upload?fileid=' + $("#fileid").val(),
+							accept: 'file',
+							multiple: true,
+							auto: false,
+							size: 200 * 1024 * 1024 //限制文件大小，单位 KB
+								,
+							bindAction: '#testListAction',
+							choose: function(obj) {
+								var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+								//读取本地文件
+								obj.preview(function(index, file, result) {
+									var tr = $(['<tr id="upload-' + index + '">', '<td>' + file.name + '</td>', '<td>' + (file.size / 1024 /
+											1024).toFixed(1) + 'M</td>', '<td>等待上传</td>', '<td>',
+										'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>',
+										'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>', '</td>', '</tr>'
+									].join(''));
 
-<script src="js/editor/js/plugins/tables.min.js"></script>
-<script src="js/editor/js/plugins/lists.min.js"></script>
-<script src="js/editor/js/plugins/colors.min.js"></script>
-<script src="js/editor/js/plugins/media_manager.min.js"></script>
-<script src="js/editor/js/plugins/font_family.min.js"></script>
-<script src="js/editor/js/plugins/font_size.min.js"></script>
-<script src="js/editor/js/plugins/block_styles.min.js"></script>
-<script src="js/editor/js/plugins/video.min.js"></script>
-<script src="js/date/js/laydate.js"></script>
-<script>
-    $(function(){
-        $('#editor').editable({inlineMode: false, alwaysBlank: true})
-    });
-</script>
-<script >
-    $.validator.setDefaults({
+									//单个重传
+									tr.find('.demo-reload').on('click', function() {
+										obj.upload(index, file);
+									});
+
+									//删除
+									tr.find('.demo-delete').on('click', function() {
+										delete files[index]; //删除对应的文件
+										tr.remove();
+										uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+									});
+									demoListView.append(tr);
+								});
+							},
+							done: function(res, index, upload) {
+								if (res.code == 0) { //上传成功
+									message = res.code;
+									var tr = demoListView.find('tr#upload-' + index),
+										tds = tr.children();
+									tds.eq(2).html('<span id="context" style="color: #5FB878;">上传成功</span>');
+									tds.eq(3).html(''); //清空操作
+									return; //删除文件队列已经上传成功的文件
+								}
+								this.error(index, upload);
+							},
+							error: function(index, upload) {
+								message = 1;
+								var tr = demoListView.find('tr#upload-' + index),
+									tds = tr.children();
+								tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+								tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+							}
+						});
+
+					/* layui邮政编码 */
+					form.verify({
+						postcode: [
+							/^[0-9]{6}$/,
+							'请输入正确的邮政编码'
+						],
+
+						/* 提案号验证 */
+						mark: function() {
+							var verify;
+							$.ajax({
+								url: 'http://localhost:8080/queryProposal',
+								data: {
+									"period": $("#period").val(),
+									"next": $("#next").val(),
+									"mark": $("#mark").val()
+								},
+								dataType: "json",
+								Type: "post",
+								async: false,
+								success: function(data) {
+									if (data) {
+										verify = "提案号已存在";
+									}
+								}
+							})
+							return verify;
+						}
+					});
+
+
+					/* 提交按钮监听 */
+					$("#bindAction").click(function() {
+						// console.log(1);
+						if (message == 1) {
+							layer.alert('请确保文件上传成功', {
+								icon: 5,
+								title: "提示"
+							});
+						} else {
+							submit();
+						}
+					})
+
+
+					/* 保存 */
+					$("#save").click(function() {
+						if (message == 1) {
+							layer.alert('请确保文件上传成功', {
+								icon: 5,
+								title: "提示"
+							});
+						} else {
+							save();
+						}
+					})
+
+					//提交方法
+					function submit() {
+						//监听提交
+						form.on('submit(form)', function(data) {
+							var datas = data.field;
+							datas.prodate = new Date(datas.prodate);
+							// console.log(new Date(datas.prodate));
+							datas.procategory = 17;
+							datas.prostate = 10;
+							datas.procase = 18;
+
+
+							console.log(data.field);
+							$.ajax({
+								url: 'http://localhost:8080/submit',
+								dataType: "json",
+								data: datas,
+								type: "post",
+
+								// async: false,
+								success: function(data) {
+									layer.alert(data.message, {
+										icon: 6,
+										title: "提示",
+										yes: function(index, layero) {
+											location.reload(false);
+											layer.close(index); //如果设定了yes回调，需进行手工关闭
+										},
+										cancel: function(index, layero) {
+											location.reload(false);
+										}
+									});
+								}
+							})
+							return false;
+						});
+					}
+
+					/* 保存方法 */
+					function save() {
+						//监听提交
+						form.on('submit(form)', function(data) {
+							var datas = data.field;
+							datas.prodate = new Date(datas.prodate);
+							datas.procategory = 17;
+							datas.prostate = 12;
+							datas.procase = "";
+							$.ajax({
+								url: 'http://localhost:8080/submit',
+								data: data.field,
+								dataType: "json",
+								Type: "post",
+								async: false,
+								success: function(data) {
+									layer.alert('存为草稿', {
+										icon: 6,
+										title: '提示',
+										yes: function(index, layero) {
+											location.reload(false);
+											layer.close(index); //如果设定了yes回调，需进行手工关闭
+										},
+										cancel: function(index, layero) {
+											location.reload(false);
+										}
+									});
+								}
+							})
+							return false;
+						});
+					}
+					/* 取消按钮 */
+					$("#reset").click(function() {
+						//清空文件
+						$("#demoList").remove();
+						//提案取消 删除已上传的文件
+						$.ajax({
+							url: 'http://localhost:8080/File/delete?fileid=' + $("#fileid").val(),
+							data: {},
+							dataType: "json",
+							Type: "post",
+							async: false,
+							success: function(data) {
+								console.log(data);
+								layer.alert(data.message, {
+									icon: 6,
+									title: '提示',
+									yes: function(index, layero) {
+										location.reload(false);
+										layer.close(index); //如果设定了yes回调，需进行手工关闭
+									},
+									cancel: function(index, layero) {
+										location.reload(false);
+									}
+								});
+							}
+						})
+					});
+				});
+			});
+
+			/* 字典查询 提案类型 */
+			function initDict() {
+				var d = "<option value='' ></option>";
+				$.ajax({
+					url: "http://localhost:8080/Dict/queryDict",
+					data: {
+						"dictype": "proposal"
+					},
+					dataType: "json",
+					Type: "post",
+					async: false,
+					success: function(data) {
+						for (var i = 0; i < data.length; i++) {
+							d += "<option value='" + data[i].dicid + "'>" + data[i].dicname + "</option>";
+						}
+						console.log(data);
+						console.log(data);
+						$("select[name=protype]").html(d);
+					}
+				});
+			}
+
+			/* 字典查询 提案类别 */
+			function initDict2() {
+				var d = "<option value='' ></option>";
+				$.ajax({
+					url: "http://localhost:8080/Dict/queryDict",
+					data: {
+						"dictype": "category"
+					},
+					dataType: "json",
+					Type: "post",
+					async: false,
+					success: function(data) {
+						for (var i = 0; i < data.length; i++) {
+							d += "<option value='" + data[i].dicid + "'>" + data[i].dicname + "</option>";
+						}
+						$("select[name=procategory]").html(d);
+					}
+				});
+			}
+
+			/* 字典查询 承办单位 */
+			function initDict3() {
+				var d = "<option value ''></option>"
+				$.ajax({
+					url: "http://localhost:8080/Dict/queryDict",
+					data: {
+						"dictype": "procbdw"
+					},
+					dataType: "json",
+					Type: "post",
+					async: false,
+					success: function(data) {
+						for (var i = 0; i < data.length; i++) {
+							d += "<option value='" + data[i].dicid + "'>" + data[i].dicname + "</option>";
+						}
+						$("select[name=procbdw]").html(d);
+					}
+				});
+			}
+
+			//uuid
+			function guid() {
+				function S4() {
+					return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+				}
+				$("#fileid").val(S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4());
+			}
+		</script>
+		<script>
+			/*  $.validator.setDefaults({
         submitHandler: function() {
             alert("修改成功");
         }
     });
     $().ready(function() {
         $("#form_demo").validate();
-    });
-</script>
-<script>
-    !function(){
-        laydate.skin('danlan');//
-        laydate({elem: '#demo'});
-        laydate({elem: '#demo1'});//
-    }();
-</script>
-</body>
+    }); */
+		</script>
+		<script>
+			! function() {
+				laydate.skin('danlan'); //
+				laydate({
+					elem: '#demo'
+				});
+				laydate({
+					elem: '#demo1'
+				}); //
+			}();
+		</script>
+	</body>
 </html>
