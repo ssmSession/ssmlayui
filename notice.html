@@ -54,11 +54,7 @@
 		</script>
 
 		<script type="text/html" id="toolbarDemo">
-			<div class="layui-btn-container">
-				<button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
-				<button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
-				<button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
-			</div>
+			
 		</script>
 
 		<script>
@@ -84,7 +80,7 @@
 
 				table.render({
 					elem: '#test',
-					height: 312,
+					height: 500,
 					url: 'http://127.0.0.1:8080/getXNotice', //数据接口
 
 					toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
@@ -97,12 +93,7 @@
 					page: true //开启分页
 						,
 					cols: [
-						[ //表头
-
-							{
-								type: 'checkbox',
-								fixed: 'left'
-							},
+						[ 
 							{
 								field: 'notid',
 								title: '编号',
@@ -169,47 +160,35 @@
 					//console.log(obj)
 					if (obj.event === 'del') {
 						layer.confirm('真的删除行么', function(index) {
-							obj.del();
+							//定义在js里面的方法
+							delXNotice(data);
 							layer.close(index);
 						});
 					} else if (obj.event === 'edit') {
-						layer.prompt({
-							formType: 2,
-							value: data.email
-						}, function(value, index) {
-							obj.update({
-								email: value
-							});
-							layer.close(index);
-						});
+						console.log(data);
+						$("#notid").val(data.notid);
+						$("#notbt2").val(data.notbt);
+						$("#notren").val(data.notren);
+						$("#notinfo").val(data.notinfo);
+						openLaero(data);
 					}
 				});
 
 
 				//查询按钮添加事件
 				$('#query').click(function() {
-
-					// 					alert($("#nottype").val());
-					// 					alert($("#notbt").val());
-					// 
-					// 					console.log(new Date($("#start").val()));
-					// 					console.log($("#start").val());
-					// 
 					let datas = {
 						nottype: $("#nottype").val(),
 						notbt: $("#notbt").val()
-
 					};
 
 					if ($("#start").val() != null && $("#start").val() != '') {
 						var date = new Date($("#start").val());
 						datas.start = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-
 					}
 					if ($("#end").val() != null && $("#end").val() != '') {
 						var date = new Date($("#end").val());
 						datas.end = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-
 					}
 
 					table.reload('tableId', {
@@ -219,116 +198,163 @@
 
 				//添加按钮添加事件
 				$("#addBtn").click(function() {
-
-					// form.render();
-					setType("nottypes");
-
-					// $("#add").style.display = "block";	
-					// $("#add").css('display', 'block');
-					// table.render('tableId',{})
-
-					layer.open({
+					openLaero("");
+				});
+				
+				function openLaero(data){
+					console.log($("#add").html());
+					var index = layer.open({
 						type: 1,
 						title: '添加' ,//不显示标题栏
 						// closeBtn: true,
-						area: '500px;',
+						area: ['500px','500px'],
 						shade: 0.8,
-						id: 'LAY_layuipro' //设定一个id，防止重复弹出
-							,
+						id: 'LAY_layuipro', //设定一个id，防止重复弹出
 						btn: ['立即添加', '马上取消'],
+						
 						btnAlign: 'c',
-						moveType: 1 //拖拽模式，0或者1
-							,
+						moveType: 1,//拖拽模式，0或者1
 						content: $("#add").html(),
-						success: function(layero) {
+						yes:function(index,layero){
+// 							console.log($(layero).find("input[name=notbt2]").val());
+// 							console.log($(layero).find("input[name=notren]").val());
+// 							console.log($(layero).find("select[name=nottypes]").val());
+// 							console.log($(layero).find("select[name=notxspt]").val());
+// 							console.log($(layero).find("textarea[name=notinfo]").val());
+
+							let urls = "http://127.0.0.1:8080/addXNotice";
+							let datas = {
+									notbt:$(layero).find("input[name=notbt2]").val(),
+									notren:$(layero).find("input[name=notren]").val(),
+									nottype:$(layero).find("select[name=nottypes]").val(),
+									notxspt:$(layero).find("select[name=notxspt]").val(),
+									notinfo:$(layero).find("textarea[name=notinfo]").val()
+								}
+
+							if($(layero).find("input[name=notid]").val()!=null && $(layero).find("input[name=notid]").val() != ''){
+								urls = "http://127.0.0.1:8080/updateXNotice";
+								datas.notid = $(layero).find("input[name=notid]").val();
+							}
+								
+							console.log(datas);
+							console.log(urls);
+							console.log($(layero).find("input[name=notid]").val());
 							
-							var btn = layero.find('.layui-layer-btn');
-							btn.find('.layui-layer-btn0').attr({
-								href: 'http://www.layui.com/',
-								target: '_blank'
+							$.ajax({
+	
+								url: urls,
+								type: 'json',
+								data: datas,
+								method: 'post',
+								success: function(resp) {
+									alert("操作成功");
+									//刷新数据
+									table.reload('tableId', {});
+									layer.close(index);
+								}
 							});
+						},
+						success: function(layero) {
+							if(data != null && data != ''){
+								$(layero).find("input[name=notbt2]").val(data.notbt);
+								$(layero).find("input[name=notren]").val(data.notren);
+								$(layero).find("textarea[name=notinfo]").val(data.notinfo);
+							}
 						}
 					});
-				});
-
-
+					form.render();
+				}
+				
+				//删除方法
+				function delXNotice (data){
+					$.ajax({
+						url: "http://127.0.0.1:8080/delXNotice",
+						type: 'json',
+						data: {
+							notid:data.notid
+						},
+						method: 'post',
+						success: function(resp) {
+							if(resp.code != -1){
+								alert("删除成功");
+								//表格刷新
+								table.reload('tableId', {});
+							}
+						}
+					});
+				}
+				
+				
+				//加载
 				$(function() {
-					setType("nottype");
+					setType("nottype",'类型');
+					setType("nottypes",'类型');
+					setType("notxspt",'显示平台')
 				})
 
-				function setType(id) {
+				function setType(id,type) {
 					$.ajax({
 						url: "http://127.0.0.1:8080/queryDict",
 						type: 'json',
 						data: {
-							dictype: '类型'
+							dictype: type
 						},
 						method: 'post',
 						success: function(resp) {
 							var str = "";
 							var arr = eval(resp);
-							str += "<option value=''>请选择</option>";
+							
 							for (i = 0; i < arr.length; i++) {
 								str += "<option value='" + arr[i].dicid + "'>" + arr[i].dicname + "</option>";
 							}
 
-							console.log(str);
-							console.log(id);
 							$("#" + id).append(str);
 							//从新加载
 							form.render('select');
 						}
 					});
 				}
-
-
-
-
 			});
 		</script>
 
-
+		<!-- layui 弹出层内容 进行渲染 -->
 		<div id="add" style="display: none;">
 
-			<form class="layui-form">
+
+			<form class="layui-form" id="from">
+				<input type="hidden" name="notid" id="notid" value="" />
 
 				<label class="layui-form-label">标题</label>
-				<div class="layui-input-block" style="width: 200px;">
-					<input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+				<div class="layui-input-block" style="width: 300px;margin-top: 30px;">
+					<input type="text" name="notbt2" value="" id="notbt2" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
 				</div>
-				<label class="layui-form-label">提交人</label>
-				<div class="layui-input-block" style="width: 200px;">
-					<input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+				<label class="layui-form-label" style="margin-top: 30px;">提交人</label>
+				<div class="layui-input-block" style="width: 300px;margin-top: 30px;">
+					<input type="text" name="notren" value="" id="notren" lay-verify="title" autocomplete="off" placeholder="请输入提交人" class="layui-input">
 				</div>
 
-				<label class="layui-form-label">类型</label>
-				<div class="layui-input-block" style="width: 200px;float: left;margin-left: 10px;">
+				<label class="layui-form-label" style="margin-top: 30px;">类型</label>
+				<div class="layui-input-block" style="width: 300px;float: left;margin-left: 0px;margin-top: 30px;">
 					<select id="nottypes" name="nottypes" lay-verify="required" lay-filter="select">
 						<!-- <option></option> -->
 					</select>
 				</div>
 
-				<!-- <div class="layui-form-item">
-					<label class="layui-form-label">状态</label>
-					<div class="layui-input-block">
-						<input id="rolParameterText" name="rolParameterText" hidden value="" />
-						<select name="rolParameter" textId="rolParameterText" lay-verify="required" lay-filter="select" id="rolParameter">
-							<option value="请选择">请选择</option>
-							<option value="1">启用</option>
-							<option value="2">禁用</option>
-						</select>
-					</div>
-				</div> -->
+				<label class="layui-form-label" style="margin-top: 30px;">显示平台</label>
+				<div class="layui-input-block" style="width: 300px;float: left;margin-left: 0px;margin-top: 30px;">
+					<select id="notxspt" name="notxspt" lay-verify="required" lay-filter="select">
+						<!-- <option></option> -->
+					</select>
+				</div>
+				<!-- <hr style="margin-top: 5px;" /> -->
+				<label class="layui-form-label" style="margin-top: 30px;float: left;">内容</label>
+				<div class="layui-input-block" style="margin-top: 160px;width: 300px;">
+					<textarea placeholder="请输入内容" value="" id="notinfo" name="notinfo" class="layui-textarea"></textarea>
+				</div>
 
-				<!-- <label class="layui-form-label">显示平台</label>
-					<div class="layui-input-block" style="width: 200px;float: left;margin-left: 10px;">
-						<!-- <select id="nottypes" name="nottype" lay-verify="required">
-							<option></option>
-						</select> -->
-		</div> -->
+			</form>
 
-		</form>
-
+			
 
 		</div>
 
