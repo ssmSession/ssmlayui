@@ -9,7 +9,7 @@ $(function() {
 function initHf(){
     var d = "<option value='0' >请选择类型</option>";
     $.ajax({
-        url:"queryDict",
+        url:"http://localhost:8080/queryDict",
         data:{"dictype":"回复部门"},
         dataType:"json",
         Type:"post",
@@ -114,7 +114,7 @@ function queryHf() {
             "rephfbm" : $("#rephfbm").val()
         };
         table.reload('hf', {
-            url : 'Reply/queryReplyHf',
+            url : 'http://localhost:8080/Reply/queryReplyHf',
             where : paraments,
             page:{
                 curr:1,
@@ -135,7 +135,7 @@ function queryhf(row){
             anim : 1,
             offset : 'auto',
             area : [ '1150px', '450px' ],
-            content : 'Reply/queryMHL',
+            content : 'meetsign.html',
             //btn : [ '返回', '关闭' ],
             success : function(layero, index) {
                 //获取新窗口对象

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+    <title>查看采用稿</title>
+</head>
+<link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="layui/css/layui.css" media="all" />
+<script type="text/javascript" src="layui/layui.js"></script>
+<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+<script>
+    layui.use('form', function() {
+        var form = layui.form;
+    });
+
+</script>
+<body>
+<form class="layui-form" action="" method="post">
+<div class="layui-fluid layui-form">
+    <div class="layui-row layui-col-space5">
+        <div class="layui-col-lg3">
+            <label class="layui-form-label">采用编号：</label>
+            <div class="layui-input-block">
+                <input type="text" id="repid" name="repid" readonly="readonly" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-col-lg3">
+            <label class="layui-form-label">采用名称：</label>
+            <div class="layui-input-block">
+                <input type="text" id="repname" name="repname" readonly="readonly" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-col-lg3">
+            <label class="layui-form-label">采用部门：</label>
+            <div class="layui-input-block">
+                <input id="repdws" name="repwd" type="text" readonly="readonly" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-col-lg3">
+            <label class="layui-form-label">采用时间：</label>
+            <div class="layui-input-block">
+                <input id="repdate" name="repdate" type="text" readonly="readonly" class="layui-input">
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+</body>
+</html>

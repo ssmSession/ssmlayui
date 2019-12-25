@@ -22,7 +22,7 @@ $(function() {
 function initDL(){
     var d = "<option value='' >请选择类型</option>";
     $.ajax({
-        url:"queryDict",
+        url:"http://localhost:8080/queryDict",
         data:{"dictype":"单位类型"},
         dataType:"json",
         Type:"post",
@@ -30,6 +30,7 @@ function initDL(){
         success:function(data){
             for(var i=0;i<data.length;i++){
                 d += "<option value='"+data[i].dicid+"'>"+data[i].dicname+"</option>";
+								console.log(data[i].dicname)
             }
             $("select[name=opdwllx]").html(d);
            // form.render('select');//局部渲染select
@@ -39,7 +40,7 @@ function initDL(){
 function initXL(){
     var d = "<option value='' >请选择报关方式</option>";
     $.ajax({
-        url:"queryDict",
+        url:"http://localhost:8080/queryDict",
         data:{"dictype":"报关方式"},
         dataType:"json",
         Type:"post",
@@ -56,7 +57,7 @@ function initXL(){
 function initSF(){
     var d = "<option value='' >请选择报送人身份</option>";
     $.ajax({
-        url:"queryDict",
+        url:"http://localhost:8080/queryDict",
         data:{"dictype":"报送人身份"},
         dataType:"json",
         Type:"post",
