@@ -7,9 +7,9 @@ $(function() {
     });
 });
 function initML(){
-    var d = "<option value='0' >请选择类型</option>";
+    var d = "<option value='' >请选择类型</option>";
     $.ajax({
-        url:"queryDict",
+        url:"http://localhost:8080/queryDict",
         data:{"dictype":"单位类型"},
         dataType:"json",
         Type:"post",
@@ -17,6 +17,7 @@ function initML(){
         success:function(data){
             for(var i=0;i<data.length;i++){
                 d += "<option value='"+data[i].dicid+"'>"+data[i].dicname+"</option>";
+								console.log(data[i].dicname)
             }
             $("select[name=repdw]").html(d);
             // form.render('select');//局部渲染select
@@ -109,7 +110,7 @@ function queryMl() {
             "repdw" : $("#repdw").val()
         };
         table.reload('cyg', {
-            url : 'Reply/queryReply',
+            url : 'http://localhost:8080/Reply/queryReply',
             where : paraments,
             page:{
                 curr:1,
@@ -130,7 +131,7 @@ function queryxx(row){
             anim : 1,
             offset : 'auto',
             area : [ '920px', '350px' ],
-            content : 'Reply/queryMLL',
+            content : 'layui/cygck.html',
             btn : [ '返回', '关闭' ],
             success : function(layero, index) {
                 var body = layer.getChildFrame('body', index);
@@ -149,7 +150,7 @@ function queryxx(row){
 function deleteMl(row){
         layer.confirm('确认删除名称为' + row.repname + "的这个目录？", function (index, layero) {
             $.ajax({
-                url: "Reply/deleteReply",
+                url: "http://localhost:8080/Reply/deleteReply",
                 data: {
                     repid: row.repid,
                     oplgbt: row.repname

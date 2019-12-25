@@ -7,7 +7,7 @@ $(function(){
 
 function Custs(){
     $.ajax({
-        url:'queryTj',
+        url:'http://localhost:8080/queryTj',
         data:{"statr" : $("#statr").val(),"end" : $("#end").val()},
         type:'post',
         dataType:'json',

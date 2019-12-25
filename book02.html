@@ -64,7 +64,7 @@
             var demoListView = $('#demoList')
                 , uploadListIns = upload.render({
                 elem: '#testList'
-                , url: 'File/upload?fileid=' + $("#fileid").val()
+                , url: 'http://localhost:8080/File/upload?fileid=' + $("#fileid").val()
                 , accept: 'file'
                 , multiple: true
                 , auto: false
@@ -167,7 +167,7 @@
                 $("#demoList").remove();
                 //提案取消 删除已上传的文件
                 $.ajax({
-                    url: 'File/delete',
+                    url: 'http://localhost:8080/File/delete',
                     data: {"fileid": $("#fileid").val()},
                     dataType: "json",
                     Type: "post",
