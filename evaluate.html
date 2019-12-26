@@ -162,99 +162,6 @@
 						}
 					});
 
-					// })
-
-					/* 表格 */
-					function initTables(wheres) {
-						var table = layui.table;
-						table.render({
-							elem: "#tb",
-							height: 500,
-							url: 'http://localhost:8080/queryProposalPager',
-							page: true, //开启分页
-							where: wheres,
-							toolbar: true,
-							totalRow: true,
-							page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
-								layout: ['row', 'count', 'prev', 'page', 'next', 'skip'], //自定义分页布局
-								//,curr:5//设定初始在第五页
-								row: 10, //一页显示多少条
-								rows: [5, 10, 15], //每页条数的选择项
-								first: "首页", //不显示首页
-								last: "尾页", //不显示尾页
-							},
-							cols: [
-								[ // 表头
-									{
-										title: "提案号",
-										field: 'mark',
-										align: "center",
-										width: '10%',
-										sort: true,
-									},
-									{
-										title: '提案类型',
-										field: 'protype',
-										width: '10%',
-										align: "center"
-									},
-									{
-										title: '提案类别',
-										field: 'procategory',
-										width: '10%',
-										align: "center"
-									},
-									{
-										title: '案由',
-										field: 'proany',
-										width: '20%',
-										align: "center"
-									},
-									{
-										title: '提案者',
-										field: 'protar',
-										width: '10%',
-										align: "center"
-									},
-									{
-										title: '办理单位',
-										field: 'procbdw',
-										width: '10%',
-										align: "center"
-									},
-									{
-										title: '办理情况',
-										field: 'procase',
-										width: '10%',
-										align: "center"
-									},
-									{
-										title: '提案状态',
-										field: 'prostate',
-										width: '10%',
-										align: "center"
-									},
-									{
-										title: '操作',
-										width: '11%',
-										field: "",
-										align: "center",
-										templet: function(data) {
-											// console.log(data);
-											var row = JSON.stringify(data).replace(/\"/g, "'");
-											 var btn='<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit" href="javascript:evaluate('+row+');">评价</a>';
-											return btn;
-										}
-									}
-								]
-							],
-							id: 'testReload',
-							done: function(res, curr, count) {
-								if (res.success == false)
-									layer.msg(res.message);
-							}
-						});
-					}
 				})
 
 
@@ -360,6 +267,100 @@
 					});
 				}
 			})
+			
+			
+			/* 表格 */
+			function initTables(wheres) {
+				var table = layui.table;
+				table.render({
+					id : "tb",
+					elem : '#tb',
+					height : "full-113",
+					url : 'http://localhost:8080/queryProposalPager',
+					title : "提案查询",
+					page : true,
+					where:wheres,
+					limit:5,
+					limits:[5,10,15],
+					method : "post",
+					text : {
+						none : '对不起，暂无此类数据'
+					},
+					request : {
+						pageName : 'page',
+						limitName : 'rows'
+					},
+					cols: [
+						[ // 表头
+							{
+								title: "提案号",
+								field: 'mark',
+								align: "center",
+								width: '10%',
+								sort: true,
+							},
+							{
+								title: '提案类型',
+								field: 'protype',
+								width: '10%',
+								align: "center"
+							},
+							{
+								title: '提案类别',
+								field: 'procategory',
+								width: '10%',
+								align: "center"
+							},
+							{
+								title: '案由',
+								field: 'proany',
+								width: '20%',
+								align: "center"
+							},
+							{
+								title: '提案者',
+								field: 'protar',
+								width: '10%',
+								align: "center"
+							},
+							{
+								title: '办理单位',
+								field: 'procbdw',
+								width: '10%',
+								align: "center"
+							},
+							{
+								title: '办理情况',
+								field: 'procase',
+								width: '10%',
+								align: "center"
+							},
+							{
+								title: '提案状态',
+								field: 'prostate',
+								width: '10%',
+								align: "center"
+							},
+							{
+								title: '操作',
+								width: '11%',
+								field: "",
+								align: "center",
+								templet: function(data) {
+									// console.log(data);
+									var row = JSON.stringify(data).replace(/\"/g, "'");
+									var btn='<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit" href="javascript:evaluate('+row+');">评价</a>';
+									return btn;
+								}
+							}
+						]
+					],
+					done: function(res, curr, count) {
+						if (res.success == false)
+							layer.msg(res.message);
+					}
+				});
+			}
 			
 			//评价
 			function evaluate(row){
