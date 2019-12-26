@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>提案查询</title>
+		<link href="css/all.css" rel="stylesheet" type="text/css">
+		<link href="js/bstable/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link href="js/bstable/css/bootstrap-table.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+	</head>
+	<body>
+		<form class="layui-form" style="top: 200px;">
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: 100px;"> 届 次：</label>
+				<div class="layui-input-inline">
+					<select class="find_input" id="period" name="period">
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: 150px;">提案号：</label>
+				<div class="layui-input-inline">
+					<input type="text" class="layui-input" name="mark" id="mark" style="width: 200px;">
+				</div>
+			</div>
+
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: 150px;">提案类型：</label>
+				<div class="layui-input-inline">
+					<select class="find_input" id="protype" name="protype">
+					</select>
+				</div>
+			</div>
+
+
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: 100px;">承办单位：</label>
+				<div class="layui-input-inline">
+					<select class="find_input" name="procbdw" id="procbdw">
+					</select>
+				</div>
+			</div>
+
+
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: 150px;">提案类别：</label>
+				<div class="layui-input-inline">
+					<select class="find_input" name="procategory" id="procategory">
+					</select>
+				</div>
+			</div>
+
+
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: 150px;">提案状态：</label>
+				<div class="layui-input-inline">
+					<select class="find_input" name="prostate" id="prostate">
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-col-lg3" style="float: right;">
+				<button class="layui-btn" id="query" type="button" style="margin-left: 170px">
+					<i class="layui-icon layui-icon-search"></i> 查询
+				</button>
+				<!-- <button type="button" class="layui-btn layui-btn-warm layui-btn layui-btn-sm" id="but" style="height: 40px;width: 100px;"><i
+					 class="fa fa-file-excel-o" aria-hidden="true"></i>导出</button> -->
+			</div>
+
+
+			<!-- <div>
+				    <div class="table-responsive table2excel" data-tableName="Test Table 1">
+				        <table class="layui-hide" id="tb" lay-filter="tb"></table>
+				    </div>
+				</div> -->
+
+		</form>
+
+
+		<!-- 表格 -->
+		<table id="tb" class="table-responsive table2excel" data-tableName="Test Table 1" style="height: 8px;" width="1000px">
+		</table>
+
+		<script src="js/jquery/jQuery-2.2.0.min.js"></script>
+		<script src="js/bstable/js/bootstrap.min.js"></script>
+		<script src="js/bstable/js/bootstrap-table.js"></script>
+		<script src="js/bstable/js/bootstrap-table-zh-CN.min.js"></script>
+		<script src="js/date/js/laydate.js"></script>
+		<script src="./js/date/js/laydate.js"></script>
+		<script src="layui/layui.js"></script>
+		<script src="js/date/js/laydate.js"></script>
+		<!-- <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script> -->
+
+
+
+		<script>
+			$(function() {
+				initPeriod();
+				initProposalType();
+				initDict2();
+				initDict3();
+				initDict4()
+
+				layui.use(['form', 'table', 'laypage', 'laydate'], function() {
+					var form = layui.form;
+					$ = layui.jquery;
+					table = layui.table;
+					laypage = layui.laypage;
+					var wheres;
+					initTables(wheres);
+
+					//查询
+					$("#query").click(function() {
+						wheres = {
+							"period": $("#period").val(),
+							"mark": $("#mark").val(),
+							"protype": $("#protype").val(),
+							"procbdw": $("#procbdw").val(),
+							"procategory": $("#procategory").val(),
+							"prostate": $("#prostate").val()
+						};
+						initTables(wheres);
+					});
+
+					form.render();
+
+					/* 表格 */
+					function initTables(wheres) {
+						var table = layui.table;
+						table.render({
+							elem: "#tb",
+							height: 500,
+							url: 'http://localhost:8080/queryProposalPager',
+							page: true, //开启分页
+							where: wheres,
+							toolbar: true,
+							totalRow: true,
+							page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+								layout: ['row', 'count', 'prev', 'page', 'next', 'skip'], //自定义分页布局
+								//,curr:5//设定初始在第五页
+								row: 10, //一页显示多少条
+								rows: [5, 10, 15], //每页条数的选择项
+								first: "首页", //不显示首页
+								last: "尾页", //不显示尾页
+							},
+							cols: [
+								[ // 表头
+									{
+										title: "提案号",
+										field: 'mark',
+										align: "center",
+										width: '10%',
+										sort: true,
+									},
+									{
+										title: '提案类型',
+										field: 'protype',
+										width: '10%',
+										align: "center"
+									},
+									{
+										title: '提案类别',
+										field: 'procategory',
+										width: '10%',
+										align: "center"
+									},
+									{
+										title: '案由',
+										field: 'proany',
+										width: '16%',
+										align: "center"
+									},
+									{
+										title: '提案者',
+										field: 'protar',
+										width: '10%',
+										align: "center"
+									},
+									{
+										title: '办理单位',
+										field: 'procbdw',
+										width: '10%',
+										align: "center"
+									},
+									{
+										title: '办理情况',
+										field: 'procase',
+										width: '10%',
+										align: "center"
+									},
+									{
+										title: '提案状态',
+										field: 'prostate',
+										width: '10%',
+										align: "center"
+									},
+									{
+										title: '操作',
+										width: '15%',
+										field: "",
+										align: "center",
+										templet: function(data) {
+											// console.log(data);
+											var row = JSON.stringify(data).replace(/\"/g, "'");
+											var btn = '<a class="layui-btn layui-btn-xs" lay-event="edit" href="javascript:edit(' + row +
+												');">编辑</a>';
+											btn += '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" href="javascript:del(' +
+												row +
+												');">删除</a>'
+											return btn;
+										}
+									}
+								]
+							],
+							id: 'testReload',
+							done: function(res, curr, count) {
+								if (res.success == false)
+									layer.msg(res.message);
+							}
+						});
+					}
+				})
+				
+				
+				
+				
+				
+
+				/* 届次查询 */
+				function initPeriod() {
+					var d = "<option value=''></option>";
+					$.ajax({
+						url: 'http://localhost:8080/queryPeriod',
+						data: {},
+						dataType: "json",
+						Type: "post",
+						async: false,
+						success: function(data) {
+							for (var i = 0; i < data.length; i++) {
+								d += "<option value='" + data[i].period + "'>" + data[i].period + "</option>";
+							}
+							// console.log(data);
+							$("select[name=period]").html(d);
+						}
+					});
+				}
+
+				/* 字典查询 提案类型*/
+				function initProposalType() {
+					var d = "<option value=''></option>";
+					$.ajax({
+						url: 'http://localhost:8080/Dict/queryDict',
+						data: {
+							"dictype": "proposal"
+						},
+						dataType: "json",
+						Type: "post",
+						async: false,
+						success: function(data) {
+							for (var i = 0; i < data.length; i++) {
+								d += "<option value='" + data[i].dicid + "'>" + data[i].dicname + "</option>";
+							}
+							$("select[name=protype]").html(d);
+						}
+					});
+				}
+
+				/* 字典查询 承包单位 */
+				function initDict2() {
+					var d = "<option value =''></option>";
+					$.ajax({
+						url: 'http://localhost:8080/Dict/queryDict',
+						data: {
+							"dictype": "procbdw"
+						},
+						dataType: "json",
+						Type: "post",
+						async: false,
+						success: function(data) {
+							for (var i = 0; i < data.length; i++) {
+								d += "<option value='" + data[i].dicid + "'>" + data[i].dicname + "</option>";
+							}
+							$("select[name=procbdw]").html(d);
+						}
+					});
+				}
+
+				/* 字典查询 提案类别 */
+				function initDict3() {
+					var d = "<option value =''></option>";
+					$.ajax({
+						url: 'http://localhost:8080/Dict/queryDict',
+						data: {
+							"dictype": "category"
+						},
+						dataType: "json",
+						Type: "post",
+						async: false,
+						success: function(data) {
+							for (var i = 0; i < data.length; i++) {
+								d += "<option value='" + data[i].dicid + "'>" + data[i].dicname + "</option>";
+							}
+							$("select[name=procategory]").html(d);
+						}
+					});
+				}
+
+				/* 字典查询 提案状态 */
+				function initDict4() {
+					var d = "<option value='' ></option>";
+					$.ajax({
+						url: "http://localhost:8080/Dict/queryDict",
+						data: {
+							"dictype": "state"
+						},
+						dataType: "json",
+						Type: "post",
+						async: false,
+						success: function(data) {
+							// console.log(data);
+							for (var i = 0; i < data.length; i++) {
+								d += "<option value='" + data[i].dicid + "'>" + data[i].dicname + "</option>";
+							}
+							$("select[name=prostate]").html(d);
+							// form.render('select');//局部渲染select
+						}
+					});
+				}
+
+			})
+
+
+			//编辑
+			function edit(row) {
+				var index = layui.layer.open({
+					title: "编辑",
+					type: 2,
+					content: "edit.html", //弹出层页面
+					area: ['500px', '560px'],
+					success: function(layero, index) {
+						//获取弹出层标签对象
+						var body = layui.layer.getChildFrame('body', index);
+						//获取新窗口对象
+						var iframeWindow = layero.find('iframe')[0].contentWindow;
+						console.log(row);
+						if (row) {
+							// // 取到弹出层里的元素，并把编辑的内容放进去
+							body.find("#proid").val(row.proid); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+							body.find("#period").val(row.period); //届
+							body.find("#next").val(row.next); //几次会议
+							body.find("#mark").val(row.mark); //几号提案
+							body.find("#protype").val(row.xd); //提案类型
+							body.find("#proany").val(row.proany); //案由
+							body.find("#protar").val(row.protar); //第一提案人
+							body.find("#promc").val(row.promc); //名次
+							body.find("#prodp").val(row.prodp); //党派
+							body.find("#prowyzh").val(row.prodp); //委员证号
+							body.find("#postcode").val(row.postcode); //邮政编号
+							body.find("#protel").val(row.protel); //联系电话
+							body.find("#prodwjzw").val(row.prodwjzw); //单位及职务
+							body.find("#proemail").val(row.proemail); //E-mail
+							body.find("#protxdz").val(row.protxdz); //通讯地址
+							body.find("#editor").val(row.proany); //提案内容
+							body.find("#demo").val(formatterDate2(row.prodate)); //提案日期
+							// console.log(formatterDate2(row.prodate).substring(""));
+							if (row.proxgqk == "on") {
+								body.find("#proxgqk").attr("checked", "checked") //相关情况
+							}
+
+							//文件显示
+							var demoListView = $('#demoList');
+							$.ajax({
+								url: "http://localhost:8080/File/queryFile",
+								data: {
+									"fileid": row.fileid
+								},
+								dataType: "json",
+								Type: "post",
+								async: false,
+								success: function(data) {
+									console.log(data);
+									console.log(eval(data));
+									for (var i = 0; i < data.length; i++) {
+										var tr = $(['<tr id="upload-' + i + '">', '<td>' + data[i].realName + '</td>', '<td>' + (data[i].filesize /
+											1024 / 1024).toFixed(1) + 'M</td>', '</tr>'].join(''));
+										body.find("#demoList").append(tr);
+									}
+								}
+							});
+
+							body.find("#fileid").val(row.fileid); //文件
+							body.find("#procbdw").val(row.xd1); //承办单位
+							body.find("#prolxrxm").val(row.prolxrxm); //提案联系人
+							body.find("#prolxrdw").val(row.prolxrdw); //提案联系人单位
+							body.find("#prolxrdh").val(row.prolxrdh); //提案联系人电话
+							body.find("#joinid").val(row.joinid); //提案联系人电话
+							body.find("#prostate").val(row.xd3); //提案状态
+							body.find("#procategory").val(row.xd2); //办理情况
+							body.find("#procase").val(row.xd4); //提案类别
+							//重新渲染
+							iframeWindow.layui.form.render();
+						}
+						setTimeout(function() {
+							layui.layer.tips('点击此处返回用户列表', '.layui-layer-setwin .layui-layer-close', {
+								tips: 3
+							});
+						}, 500)
+					}
+				});
+				layui.layer.full(index); //设置弹出层布满窗口
+				//改变窗口大小时，重置弹窗的宽高，防止超出可视区域（如F12调出debug的操作）
+				$(window).on("resize", function() {
+					// layui.layer.full(window.sessionStorage.getItem("index"));
+				})
+			}
+
+
+			//删除
+			function del(row) {
+				if (row.prostate == "未提交") {
+					$.ajax({
+						url: "http://localhost:8080/deleteProposal",
+						data: {
+							"proid": row.proid
+						},
+						dataType: "json",
+						Type: "post",
+						async: false,
+						success: function(data) {
+							if (data.success) {
+								layer.alert(data.message, {
+									icon: 1,
+									title: "提示",
+									yes: function(index, layero) {
+										//do something
+										layer.close(index); //如果设定了yes回调，需进行手工关闭
+										table.reload('testReload', {});
+									},
+									cancel: function(index, layero) {
+										initTables("");
+									}
+								});
+							}
+						}
+					});
+				} else {
+					layer.alert("未提交才能进行删除操作", {
+						icon: 4,
+						title: "提示",
+					});
+				}
+
+			}
+
+
+			function formatterDate2(date) {
+				var oDate = new Date(date),
+					oYear = oDate.getFullYear(),
+					oMonth = oDate
+					.getMonth() + 1,
+					oDay = oDate.getDate(),
+					oHour = oDate.getHours(),
+					oMinutes = oDate.getMinutes(),
+					oSen = oDate.getSeconds(),
+					oTime = oYear + '-' +
+					getzf(oMonth) + '-' + getzf(oDay) + ' ' + getzf(oHour) + ':' + getzf(oMinutes) +
+					':' + getzf(oSen);
+				return oTime;
+			}
+
+			function getzf(num) {
+				if (parseInt(num) < 10) {
+					num = '0' + num;
+				}
+				return num;
+			}
+		</script>
+	</body>
+</html>
