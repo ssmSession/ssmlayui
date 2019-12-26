@@ -11,29 +11,47 @@
 
 	</head>
 	<body>
-		<div class="div_tab01">
-			<div class="map_find1">
-				<p>
-				<label>委员名称：</label><input type="text" class="map_input" id="username" name="username"/>
-				<label>委员证号：</label><input type="text" class="map_input" id="singwyzh" name="singwyzh"/>
-				<label>考勤情况：</label>
-				<select class="map_input" name="singkqqk" id="singkqqk">
-						<option  value="0">迟到</option>
-						<option  value="1">早退</option>
-						<option  value="2">缺会</option>
-						<option  value="3">正常</option>
 
-					</select>
-				<button class="layui-btn" id="search" type="button" style="margin-left: 15px">
-					<i class="layui-icon layui-icon-search"></i> 查询
-				</button>
-				<button class="layui-btn layui-btn-primary">导出</button>
+
+		<form class="layui-form">
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: 100px;">委员名称：</label>
+				<div class="layui-input-inline">
+					<input type="text" class="layui-input" id="username" name="username">
+				</div>
 			</div>
-			
-			<p>
-				<table id="table" class="table_style" style="margin-top: 20px;">
-				</table>
-			</p>
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: 100px;">委员证号：</label>
+				<div class="layui-input-inline">
+					<input type="text" class="layui-input" id="singwyzh" name="singwyzh">
+				</div>
+			</div>
+
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: 100px;">类型：</label>
+				<div class="layui-input-inline">
+					<select name="singkqqk" id="singkqqk">
+						<option ></option>
+						<option value="1">迟到</option>
+						<option value="2">早退</option>
+						<option value="3">缺会</option>
+						<option value="4">正常</option>
+					</select>
+				</div>
+			</div>
+
+			<button class="layui-btn" id="search" type="button" style="margin-left: 15px">
+				<i class="layui-icon layui-icon-search"></i> 查询
+			</button>
+			<!-- <button class="layui-btn layui-btn-primary">导出</button> -->
+
+		</form>
+
+
+		<p>
+			<table id="demo" lay-filter="test" class="table_style" style="margin-top: 20px;">
+			</table>
+		</p>
 		</div>
 		<script src="js/jquery/jQuery-2.2.0.min.js"></script>
 		<script src="js/bstable/js/bootstrap.min.js"></script>
@@ -53,124 +71,108 @@
 			}();
 		</script>
 
-		<script type="text/javascript">
-			$(function() {
-				$('#table').bootstrapTable({
-					method: "post",
-					striped: true,
-					singleSelect: false,
-					url: "http://localhost:8080/sing/loadSing",
-					dataType: "json",
-					pagination: true, //分页
-					pageSize: 10,
-					pageNumber: 1,
-					contentType: "application/x-www-form-urlencoded",
-					queryParams: null,
-					columns: [
-						// {
-						// 	checkbox: "true",
-						// 	field: 'check',
-						// 	align: 'center',
-						// 	valign: 'middle'
-						// },
-						{
-							title: "编号",
-							field: 'singid',
-							align: 'center',
-							valign: 'middle'
-						},
-						{
-							title: '委员名称',
-							field: 'xUser.username',
-							align: 'center',
-							valign: 'middle'
-						},
-						{
-							title: '委员证号',
-							field: 'singwyzh',
-							align: 'center'
-						},
 
-						{
-							title: '入场时间',
-							field: 'singrcsj',
-							align: 'center'
-						},
-						{
-							title: '出场时间',
-							field: 'singccsj',
-							align: 'center'
-						},
-						{
-							title: '考勤情况',
-							field: 'singkqqk',
-							align: 'center',
-							formatter: function(cellval, row) {
-								//var cellval=$("#station").val();
-								if (cellval == '迟到') {
-									return '<div  style="color:red">' + cellval + '</div>';
-								} else if (cellval == '缺会') {
-									return '<div  style="color:#801953">' + cellval + '</div>';
-								} else {
-									return cellval;
-								}
-							}
-						},
-						{
-							title: '操作',
-							field: 'opear',
-							align: 'center',
-							formatter: function(value, row) {
-								var e = '<a  href="#" title="查看详情" onclick="handleEvent(\'' + row.id + '\')">查看详情</a> ';
-								return e;
-							}
-						}
-					]
-				});
-			})
-		</script>
 		<script src="js/layer_v2.1/layer/layer.js"></script>
 		<script>
-			layui.use(['form', 'table','layer'], function() {
-						var table = layui.table;
-						form = layui.form;
-						$ = layui.jquery;
-						layer=layui.layer;
-						
-					$('#search').click(function(){
-						$.ajax({
-							url: 'http://localhost:8080/sing/loadSing',
-							dataType: 'json',
-							data:{
-								username:$('#username').val(),
-								singwyzh:$('#singwyzh').val(),
-								singkqqk:$("#singkqqk option:selected").text()
+			layui.use(['form', 'table', 'layer'], function() {
+				var table = layui.table;
+				form = layui.form;
+				$ = layui.jquery;
+				layer = layui.layer;
+
+				form.render();
+
+				 table.render({
+					elem: '#demo',
+					height: 500,
+					url: 'http://localhost:8080/sing/loadSing', //数据接口
+					page: true, //开启分页
+					toolbar: true,
+					totalRow: true,
+					page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+						layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'], //自定义分页布局
+						curr: 1 ,//设定初始在第 5 页
+						limit: 10, //一页显示多少条
+						limits: [5, 10, 15,20,25,30] ,//每页条数的选择项
+						first: "首页", //不显示首页
+						last: "尾页" //不显示尾页
+					},
+					cols: [
+						[{
+								title: "编号",
+								field: 'singid',
+								align: 'center',
+								valign: 'middle'
 							},
-							type: 'post',
-							success: function (data) {
-								console.log($("#singkqqk option:selected").text());
-								
+							{
+								title: '委员名称',
+								field: 'name',
+								align: 'center',
+								valign: 'middle',
+								templet: '<div>{{d.xUser.name}}</div>'
+							},
+							{
+								title: '委员证号',
+								field: 'singwyzh',
+								align: 'center'
+							},
+
+							{
+								title: '入场时间',
+								field: 'singrcsj',
+								align: 'center'
+							},
+							{
+								title: '出场时间',
+								field: 'singccsj',
+								align: 'center'
+							},
+							{
+								title: '考勤情况',
+								field: 'singkqqk',
+								align: 'center',
+								templet: function setStatus(data) {
+									var singkqqk = data.singkqqk;
+									if(singkqqk=='迟到'){
+										return "<span style='color:red;'>迟到</span>"
+									}else if (singkqqk == '缺会') {
+										return "<span style='color:#801953;'>缺会</span>"
+									}else 
+									if(singkqqk=='正常'){
+										return "<span style='color:green;'>正常</span>"
+									}
+								}
+							}
+							// {
+							// 	title: '操作',
+							// 	field: 'opear',
+							// 	align: 'center',
+
+							// }
+						]
+					],
+					id: 'demoReload'
+				});
+
+				$(function() {
+					$('#search').click(function() {
+						// console.log($("#singkqqk option:selected").text());
+						console.log($('#username').val());
+						table.reload('demoReload', {
+							where: {
+								username: $('#username').val(),
+								singwyzh: $('#singwyzh').val(),
+								singkqqk: $("#singkqqk option:selected").text()
 							}
 						})
 					})
+				})
+
+
+
+
 
 			});
-			// function openlayer(id) {
-			// 	layer.open({
-			// 		type: 2,
-			// 		title: '添加信息',
-			// 		shadeClose: true,
-			// 		shade: 0.5,
-			// 		skin: 'layui-layer-rim',
-			// 		//            maxmin: true,
-			// 		closeBtn: 1,
-			// 		area: ['98%', '92%'],
-			// 		shadeClose: true,
-			// 		closeBtn: 1,
-			// 		content: 'lay01.html'
-			// 		//iframe的url
-			// 	});
-			// }
 		</script>
 		<script>
 			// $(function() {
