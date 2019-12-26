@@ -328,9 +328,9 @@
 							var datas = data.field;
 							datas.prodate = new Date(datas.prodate);
 							// console.log(new Date(datas.prodate));
-							datas.procategory = 17;
-							datas.prostate = 10;
-							datas.procase = 18;
+// 							datas.procategory = 17;
+							datas.prostate = 10;//提交 对应状态 12：未提交 10:已提交
+// 							datas.procase = 18;
 
 
 							console.log(data.field);
@@ -365,9 +365,9 @@
 						form.on('submit(form)', function(data) {
 							var datas = data.field;
 							datas.prodate = new Date(datas.prodate);
-							datas.procategory = 17;
-							datas.prostate = 12;
-							datas.procase = "";
+// 							datas.procategory = 17;
+							datas.prostate = 12;//存为草稿对应状态 12：未提交 10:已提交
+// 							datas.procase = "";
 							$.ajax({
 								url: 'http://localhost:8080/submit',
 								data: data.field,
