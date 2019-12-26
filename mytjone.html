@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	    <title>Title</title>
+	</head>
+<link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="layui/css/layui.css" media="all" />
+<script type="text/javascript" src="layui/layui.js"></script>
+<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="highcharts/highcharts.js"></script>
+<script type="text/javascript" src="highcharts/exporting.js"></script>
+<script type="text/javascript" src="highcharts/highcharts-zh_CN.js"></script>
+<script type="text/javascript" src="js/social/socialTj.js"></script>
+<script>
+    layui.use('form', function() {
+        var form = layui.form;
+    });
+
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#statr'
+        });
+        laydate.render({
+            elem: '#end'
+        });
+    });
+</script>
+<body>
+<div class="layui-container layui-form" style="margin-top: 10px;">
+
+    <div class="layui-row layui-col-space0">
+        <div class="layui-inline">
+            <label class="layui-form-label">统计时间：</label>
+            <div class="layui-input-inline">
+                <input type="text" autocomplete="off" class="layui-input" name="statr" id="statr" placeholder="请选择" style="width: 120px;">
+            </div>
+            <label>----</label>
+            <div class="layui-input-inline">
+                <input type="text" autocomplete="off" class="layui-input" name="end" id="end" placeholder="请选择" style="width: 120px;">
+            </div>
+        </div>
+        <button
+                class="layui-btn layui-btn-sm layui-btn-radius layui-btn-radius"
+                id="btn">
+            <i class="layui-icon">&#xe615;</i>查询
+        </button>
+    </div>
+
+</div>
+
+        <div id="container" style="min-width:400px;height:400px"></div>
+</body>
+</html>
+</html>
